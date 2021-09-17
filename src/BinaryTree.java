@@ -3,30 +3,10 @@ public class BinaryTree {
     Node root;
 
     public void add(int value) {
-        if (root == null) {
+        if (root == null)
             root = new Node(value);
-            return;
-        }
-
-        Node curr = root;
-        Node newNode = new Node(value);
-        while (curr != null) {
-            if (value <= curr.getValue()) {
-                if (curr.getLeftChild() == null) {
-                    curr.setLeftChild(newNode);
-                    return;
-                } else {
-                    curr = curr.getLeftChild();
-                }
-            } else {
-                if (curr.getRightChild() == null) {
-                    curr.setRightChild(newNode);
-                    return;
-                } else {
-                    curr = curr.getRightChild();
-                }
-            }
-        }
+        else
+            root.insert(value);
     }
 
     public boolean isExist(int value) {
@@ -56,7 +36,7 @@ public class BinaryTree {
     }
 
     public boolean remove(int value) {
-        return true;
+        return false;
     }
 
     public void print() {
@@ -68,10 +48,15 @@ public class BinaryTree {
 
     class Node {
         private int value;
-        private Node leftChild, rightChild;
+        private Node parent, leftChild, rightChild;
 
         public Node(int value) {
             this.value = value;
+        }
+
+        public Node(int value, Node parent) {
+            this(value);
+            this.parent = parent;
         }
 
         public int getValue() {
@@ -94,12 +79,41 @@ public class BinaryTree {
             this.rightChild = rightChild;
         }
 
+        public void insert(int value) {
+            if (value <= this.value) {
+                if (this.leftChild == null) {
+                    this.leftChild = new Node(value, this);
+                } else {
+                    this.leftChild.insert(value);
+                }
+            } else {
+                if (this.rightChild == null) {
+                    this.rightChild = new Node(value, this);
+                } else {
+                    this.rightChild.insert(value);
+                }
+            }
+        }
+
         public void inOrderPrint() {
             if (this.leftChild != null)
                 this.leftChild.inOrderPrint();
             System.out.println("-" + this.value + "-");
             if (this.rightChild != null)
                 this.rightChild.inOrderPrint();
+        }
+
+        public void successorPrint() {
+            System.out.println("node: " + this.value);
+
+        }
+
+        public Node minimumValue() {
+            Node curr = this;
+            while (curr.getLeftChild() != null)
+                curr = this.getLeftChild();
+
+            return curr;
         }
     }
 }
