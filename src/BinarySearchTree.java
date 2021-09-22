@@ -1,4 +1,4 @@
-public class BinaryTree {
+public class BinarySearchTree {
 
     private Node root;
 
@@ -24,7 +24,7 @@ public class BinaryTree {
             currParent.setRightChild(new Node(value, currParent));
     }
 
-    public boolean isExist(int value) {
+    public boolean contains(int value) {
         if (root == null)
             return false;
 
