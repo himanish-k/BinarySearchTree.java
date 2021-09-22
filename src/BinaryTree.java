@@ -43,14 +43,80 @@ public class BinaryTree {
     }
 
     public boolean remove(int value) {
-        return false;
+        Node removeNode = find(value);
+        if (removeNode == null)
+            return false;
+
+        if (removeNode.getLeftChild() == null) {
+            transplant(removeNode, removeNode.getRightChild());
+        } else if (removeNode.getRightChild() == null) {
+            transplant(removeNode, removeNode.getLeftChild());
+        } else {
+            Node y = findMinimum(removeNode.getRightChild());
+            if (y.getParent() != removeNode) {
+                transplant(y, y.getRightChild());
+                y.setRightChild(removeNode.getRightChild());
+                y.getRightChild().setParent(y);
+            }
+
+            transplant(removeNode, y);
+            y.setLeftChild(removeNode.getLeftChild());
+            y.getLeftChild().setParent(y);
+        }
+
+        return true;
     }
 
     public void print() {
+        System.out.println("Tree:");
         if (this.root == null)
-            System.out.println("Empty tree.");
+            System.out.println("Empty");
         else
             this.root.inOrderPrint();
+    }
+
+    private Node find(int value) {
+        if (this.root == null)
+            return null;
+
+        Node curr = this.root;
+        while (curr != null) {
+            if (value == curr.getValue())
+                return curr;
+            else if (value < curr.getValue())
+                curr = curr.getLeftChild();
+            else
+                curr = curr.getRightChild();
+        }
+
+        return null;
+    }
+
+    private Node findMinimum(Node curr) {
+        while (curr.getLeftChild() != null) {
+            curr = curr.getLeftChild();
+        }
+
+        return curr;
+    }
+
+    /*
+    All cases are described with respect to z's parent,
+    and then a final case if n is null. No method is
+    invoked on n because it might be null, until the null
+    check is made.
+     */
+    private void transplant(Node z, Node n) {
+        Node zParent = z.getParent();
+        if (zParent == null) {
+            this.root = n;
+        } else if (zParent.getLeftChild() == z) {
+            zParent.setLeftChild(n);
+        } else {
+            zParent.setRightChild(n);
+        }
+        if (n != null)
+            n.setParent(z.getParent());
     }
 
     class Node {
