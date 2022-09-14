@@ -3,8 +3,10 @@ public class BinaryTree {
     Node root;
 
     public void add(int value) {
-        if (root == null)
+        if (root == null) {
             root = new Node(value);
+            return;
+        }
 
         Node curr = root;
         Node newNode = new Node(value);
@@ -57,6 +59,13 @@ public class BinaryTree {
         return true;
     }
 
+    public void print() {
+        if (this.root == null)
+            System.out.println("Empty tree.");
+        else
+            this.root.inOrderPrint();
+    }
+
     class Node {
         private int value;
         private Node leftChild, rightChild;
@@ -83,6 +92,14 @@ public class BinaryTree {
 
         public void setRightChild(Node rightChild) {
             this.rightChild = rightChild;
+        }
+
+        public void inOrderPrint() {
+            if (this.leftChild != null)
+                this.leftChild.inOrderPrint();
+            System.out.println("-" + this.value + "-");
+            if (this.rightChild != null)
+                this.rightChild.inOrderPrint();
         }
     }
 }
